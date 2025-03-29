@@ -1,0 +1,65 @@
+.head-row{
+    padding: 1.2%;
+}
+.head h2{
+    font-family: "Lora", serif;
+  font-optical-sizing: auto;
+  font-weight: bold;
+  font-style: normal;
+}
+.navbar-nav .nav-item .nav-link{
+    border: 1px solid ;
+    margin-right: 5px;
+    background-color:#a9b1a5;
+    color: white;
+    border-radius: 5px;
+    font-weight: bold;
+}
+#login{
+    border: none !important;
+    border-radius: 5px;
+    margin-right: 5px;
+    background-color: #0881a3!important;
+    color: aliceblue;
+    font-weight: bold;
+
+}
+#login:hover{
+    background-color: #bfe9db !important;
+    transition: 0.2s;
+    color: black;
+}
+.dropdown-item:hover{
+    background-color: rgb(191, 191, 207);
+}
+.dropdown-menu{
+    background-color: #afa5be;
+}
+.banner-section{
+    background-color: #bfe4e9d3;
+}
+body{
+    background-image: url("pexels-pixabay-256517 (1).jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    
+}
+.cache{
+    padding: 5%;
+   
+}
+.details{
+    font-weight: bold;
+}
+footer{
+    background-color: rgb(201, 190, 204);
+    padding: 3%;
+    text-align: center;
+}
+#copy{
+    font-weight: bold;
+    font-size: 20px;
+}
+.runer{
+    padding: 4%;
+}

@@ -1,0 +1,15 @@
+h3{
+    text-align: center;
+
+}
+.data{
+    padding-top:3%;
+}
+.name,.details{
+    padding-top:3%;
+    text-align: center;
+}
+.name{
+    border-right: 2px solid black;  
+
+}

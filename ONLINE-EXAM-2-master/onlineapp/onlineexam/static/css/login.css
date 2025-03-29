@@ -1,0 +1,16 @@
+.block{
+    border: 2px solid black;
+    text-align: center;
+    margin-top: 150px;
+    margin-left: -35px;
+    border-radius: 3%;
+
+}
+.blocks{
+    border: 2px solid black;
+    text-align: center;
+    margin-top: -291px;
+    margin-left: 700px;
+    border-radius: 3%;
+
+}

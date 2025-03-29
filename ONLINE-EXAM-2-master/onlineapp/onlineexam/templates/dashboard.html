@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+</head>
+<body>
+    <section>
+        <div class="container">
+            <h2>Teacher Dashboard</h2>
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                {% if user.is_authenticated %}
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">{{ user.username }}</a>
+                    <a class="btn btn-outline-danger" href="{% url 'adminlogout' %}">Logout</a>
+                </div>
+                {% endif %}
+            </nav>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <button type="button" class="btn btn-outline-primary" id="create">Create Question</button>
+        </div>
+    </section>
+
+    <section>
+        <div class="container" id="question">
+            <div class="row">
+                <form id="questionForm">
+                    {% csrf_token %}
+                    <input type="text" name="questionno" placeholder="Question Number"><br>
+                    <input type="text" name="question" placeholder="Enter Question"><br>
+                    <input type="text" name="opa" placeholder="Option A"><br>
+                    <input type="text" name="opb" placeholder="Option B"><br>
+                    <input type="text" name="opc" placeholder="Option C"><br>
+                    <input type="text" name="opd" placeholder="Option D"><br>
+                    <input type="text" name="rightans" placeholder="Right Answer"><br>
+                    <button type="submit" class="btn btn-success">Submit</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#questionForm").submit(function(event) {
+                event.preventDefault();
+                var formData = $(this).serialize();
+                
+                $.ajax({
+                    url: "{% url 'question' %}",
+                    type: "POST",
+                    data: formData,
+                    success: function(response) {
+                        alert(response.message);
+                        $("#questionForm")[0].reset();
+                    },
+                    error: function(xhr, status, error) {
+                        alert("Error submitting form.");
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

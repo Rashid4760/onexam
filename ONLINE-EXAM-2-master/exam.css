@@ -1,0 +1,17 @@
+.block{
+    padding: 5%;
+    border: 1px solid black;
+    
+    margin-top: 145px;
+}
+.blocks{
+    padding: 5%;
+    margin-top: 150px;
+}
+.img img{
+    margin-left: 100px;
+}
+.ime img{
+    margin-left: 100px;
+    margin-top: 50px;
+}

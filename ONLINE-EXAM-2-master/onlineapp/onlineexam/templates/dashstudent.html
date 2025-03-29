@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/dashstudent.css' %}">
+</head>
+<body>
+    <section>
+        <div class="container">
+            <div class="row">
+                <h3>Student Dashboard</h3>
+                <a class="btn btn-outline-success" href="{% url 'studentlogout' %}">Logout</a>
+            </div>
+            <div class="row data">
+                <div class="col-md-6">
+                    <a href="{% url 'exam' %}" class="btn btn-primary btn-lg">Enter the Exam</a>
+                </div>
+                <div class="col-md-6">
+                    {% if user.is_authenticated %}
+                        <p>First Name: {{ obj.student.first_name }}</p>
+                        <p>Last Name: {{ obj.student.last_name }}</p>
+                        <p>Email ID: {{ obj.student.email }}</p>
+                        <p>Register Number: {{ obj.student.username }}</p>
+                        
+                        {% if obj.image %}
+                            <img src="{{ obj.image.url }}" height="150" width="150" alt="Student Image">
+                        {% endif %}
+                    {% endif %}
+                    
+                    <h4>Register Face for Recognition</h4>
+                    <form action="{% url 'home' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="formFile" class="form-label">Face Image</label>
+                            <input class="form-control" type="file" id="formFile" name="image" accept="image/*" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Register Face</button>
+                    </form>
+                    
+                    {% if messages %}
+                        <div class="mt-3">
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

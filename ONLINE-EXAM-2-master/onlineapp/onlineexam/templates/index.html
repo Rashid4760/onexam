@@ -1,0 +1,46 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block title %}
+    home
+{% endblock title %}
+
+{% block customcss %}
+<link rel="stylesheet" href="{% static 'css\index.css' %}">
+    
+{% endblock customcss %}
+    
+  
+  {% block content %}
+  <section class="banner-section">
+    <div class="container con">
+        <div class="row text-center pt-3">
+            <div class="banner pt-3 ">
+                <h2>Instructions For Online Examination </h2>
+            </div>
+        </div>
+        <div class="row cache ">
+            <div class="col-md-12">
+                <div class="details">
+                    <p>Online Examination For <b>First-Tier Selection Process of Campus Placement Drive 2025</b>.</p>
+                    <p>Date:02-march-2025, Time:10:30 am to 11:30 am </p>
+                    <p>Candidate Should Login 15 minutes Before Exam</p>
+                    <p>Candidate should Bring Hallticket and college id card</p>
+                    <p>Candidate should use Registration number in your hallticket as user id for Login</p>
+                    <p>click on Login button > select student > Enter registratiion number in user id and date of birth in password field -> Click submit</p>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</section>
+<section class="bg-white runer">
+    <div class="container-fluid">
+        <div class="row">
+            <marquee behavior="" direction="" ><h2 class="text-danger">warning: malpractices are strictly hindered throughout the exam.Any suspicious activities found will not allow to continue the exam. </h2></marquee>
+        </div>
+    </div>
+</section>
+
+  {% endblock content %}
+    

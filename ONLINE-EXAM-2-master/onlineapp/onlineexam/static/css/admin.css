@@ -1,0 +1,22 @@
+#question{
+    display:none
+}
+#viewquestion{
+    display:none;
+}
+
+input{
+    width: 100%;
+}
+#viewquestion{
+   
+   text-align: center;
+    
+}
+.set{
+    border: 1px solid black;
+    border-radius: 10px;
+    margin-left: 100px;
+    
+    
+}

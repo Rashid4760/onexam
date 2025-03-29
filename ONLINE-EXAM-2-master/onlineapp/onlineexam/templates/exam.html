@@ -1,0 +1,194 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Form</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/exam.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        #timer-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 24px;
+        }
+
+        #content {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Timer Display -->
+    <div id="timer-container">
+        <div id="timer">20:00</div>
+    </div>
+
+    <!-- Main Content -->
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 block">
+                    <h2>Questions</h2>
+                    <form id="quiz-form" action="{% url 'quiz_view' %}" method="post">
+                        {% csrf_token %}
+                        <!-- Loop through questions -->
+                        {% for x in data %}
+                        <div class="form question hidden" id="question_{{ forloop.counter }}">
+                            <label for="qns_{{ x.question_number }}">{{ x.question_number }}. {{ x.question }}</label><br>
+                            <input type="radio" name="qns_{{ x.question_number }}" value="{{ x.answer1 }}" onclick="startTimer()">
+                            <span> {{ x.answer1 }}</span><br>
+                            <input type="radio" name="qns_{{ x.question_number }}" value="{{ x.answer2 }}" onclick="startTimer()">
+                            <span> {{ x.answer2 }}</span><br>
+                            <input type="radio" name="qns_{{ x.question_number }}" value="{{ x.answer3 }}" onclick="startTimer()">
+                            <span> {{ x.answer3 }}</span><br>
+                            <input type="radio" name="qns_{{ x.question_number }}" value="{{ x.answer4 }}" onclick="startTimer()">
+                            <span> {{ x.answer4 }}</span><br>
+                        </div>
+                        {% endfor %}
+                        <button type="button" class="btn btn-primary mt-3"  onclick="showNextQuestion()">Next</button>
+                        <input type="submit" id="submit-btn" class="btn btn-success mt-3 hidden" value="Submit">
+                    </form>
+
+                    <!-- Score Display Section -->
+                    <div id="score-container" class="hidden">
+                        <h3 id="score-result"></h3>
+                    </div>
+                </div>
+
+
+                <!-- Right Section with Images -->
+                <div class="col-md-6 blocks">
+                    <div class="img">
+                        <h1>Live Face Recognition</h1>
+                        <img src="{% url 'video_feed' %}" width="640" height="480" alt="Live Face Recognition Feed">
+                        <div class="controls">
+                            <button onclick="window.location.href='{% url 'release_camera' %}'" class="btn btn-danger">
+                                Stop Camera
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- JavaScript Section -->
+    <script>
+        let countdown;
+        let timeLeft = 1200; // 20 minutes in seconds
+        let timerRunning = false;
+        let currentQuestion = 1;
+        const totalQuestions = {{ data|length }}; // Total number of questions
+
+        // Show the first question initially
+        document.getElementById('question_1').classList.remove('hidden');
+
+        // Function to start the timer when an answer is clicked
+        function startTimer() {
+            if (timerRunning) {
+                return; // Timer already running, no need to start again
+            }
+            timerRunning = true;
+            countdown = setInterval(function () {
+                let minutes = Math.floor(timeLeft / 60);
+                let seconds = timeLeft % 60;
+
+                // Format time with leading zeros
+                minutes = minutes < 10 ? '0' + minutes : minutes;
+                seconds = seconds < 10 ? '0' + seconds : seconds;
+
+                document.getElementById('timer').innerHTML = minutes + ":" + seconds;
+
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    document.getElementById('timer').innerHTML = "⏰ Time's Up!";
+                    alert("Time's up! Submitting your answers...");
+                    document.getElementById('quiz-form').submit(); // Auto-submit if time is up
+                } else {
+                    timeLeft--;
+                }
+            }, 1000);
+        }
+
+        // Function to show the next question
+        function showNextQuestion() {
+            // Hide current question
+            document.getElementById('question_' + currentQuestion).classList.add('hidden');
+
+            // Move to the next question
+            currentQuestion++;
+
+            if (currentQuestion <= totalQuestions) {
+                // Show the next question
+                document.getElementById('question_' + currentQuestion).classList.remove('hidden');
+            } else {
+                // Hide next button and show submit button when all questions are done
+                document.querySelector('button[type="button"]').classList.add('hidden');
+                document.getElementById('submit-btn').classList.remove('hidden');
+            }
+        }
+
+        // Handle quiz form submission
+        document.getElementById('quiz-form').onsubmit = function (event) {
+            event.preventDefault(); // Prevent page reload
+
+            // Get form data
+            const formData = new FormData(this);
+
+            // Send AJAX request to validate answers
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Show score result after submission
+                    document.getElementById('score-result').innerHTML = `🎉 Your Score: ${data.score} / ${data.total_questions}`;
+                    document.getElementById('score-container').classList.remove('hidden');
+                })
+                .catch(error => console.error('Error:', error));
+        };
+    </script>
+
+    <!-- Bootstrap Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous">
+    </script>
+</body>
+
+</html>
