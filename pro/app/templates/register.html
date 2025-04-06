@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>register</title>
+    <style>
+        section{
+            display: flex;
+            justify-content: space-around;
+            margin-top: 100px;
+        }
+        .sform, .tform{
+            width: 300px;
+            height: 500px;
+            border: 1px solid black;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        input[type="text"], input[type="password"]{
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        input[type="submit"]{
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <section>
+        <div class="sform">
+            <form action="{% url "studentregistration" %}" method="POST">
+                {% csrf_token %}
+                <h4>student registration</h4>
+                <input type="text" name="sfirst" id="" placeholder="first name" required><br>
+                <input type="text" name="slast" id="" placeholder="last name" required> <br>
+                <input type="text" name="susername" id="" placeholder="rollno" required> <br>
+                <input type="text" name="semail" id="" placeholder="email" required> <br>
+                <input type="password" name="spassword" id="" placeholder="password" required> <br>
+                <input type="text" name="sdept" id="" placeholder="department" required> <br>
+                <input type="text" name="scpassword" id="" placeholder="confirm password" required> <br>
+                <input type="submit" value="register">
+            </form>
+        </div>
+        <div class="tform">
+            <form action="{% url "teacherregistration" %}" method="POST">
+                {% csrf_token %}
+                <h4>teacher registration</h4>
+                <input type="text" name="tfirst" id="" placeholder="first name" required><br>
+                <input type="text" name="tlast" id="" placeholder="last name" required> <br>
+                <input type="text" name="tusername" id="" placeholder="username" required> <br>
+                <input type="text" name="temail" id="" placeholder="email" required> <br>
+                <input type="password" name="tpassword" id="" placeholder="password" required> <br>
+                <input type="text" name="tcpassword" id="" placeholder="confirm password" required> <br>
+                <input type="text" name="tdept" id="" placeholder="department" required> <br>
+                <input type="submit" value="register">
+            </form>
+        </div>
+    </section>
+</body>
+</html>

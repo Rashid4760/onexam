@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard</title>
+    <script>
+        function toggleQuestionForm() {
+            const formSection = document.getElementById('question-form-section');
+            formSection.style.display = formSection.style.display === 'none' ? 'block' : 'none';
+        }
+    </script>
+</head>
+<body>
+    <section>
+        <h2>Profile</h2>
+        <p>name: {{ teacher.user.first_name }} {{ teacher.user.last_name }}</p>
+        <p>username: {{ teacher.user.username }}</p>
+        <p>email: {{ teacher.user.email }}</p>
+        <p>department: {{ teacher.dept }}</p>
+        <a href="{% url 'exam' %}"><button>View Exam</button></a>
+        <a href="{% url 'slogout' %}"><button>Logout</button></a>
+    </section>
+    <br><br>
+    <section>
+        <button onclick="toggleQuestionForm()">Create Question</button>
+    </section>
+    <br>
+    <section id="question-form-section" style="display: none;">
+        <h3>Create a Question</h3>
+        <form method="post" action="{% url 'create_question' %}">
+            {% csrf_token %}
+            <label for="question_text">Question:</label><br>
+            <textarea id="question_text" name="question_text" rows="3" cols="50" required></textarea><br><br>
+
+            <label for="option1">Option 1:</label>
+            <input type="text" id="option1" name="option1" required><br><br>
+
+            <label for="option2">Option 2:</label>
+            <input type="text" id="option2" name="option2" required><br><br>
+
+            <label for="option3">Option 3:</label>
+            <input type="text" id="option3" name="option3" required><br><br>
+
+            <label for="option4">Option 4:</label>
+            <input type="text" id="option4" name="option4" required><br><br>
+
+            <label for="correct_option">Correct Option:</label>
+            <select id="correct_option" name="correct_option" required>
+                <option value="1">Option 1</option>
+                <option value="2">Option 2</option>
+                <option value="3">Option 3</option>
+                <option value="4">Option 4</option>
+            </select><br><br>
+
+            <button type="submit">Submit Question</button>
+        </form>
+    </section>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>studntlogin</title>
+</head>
+<body>
+   
+       
+        <div class="container">
+            <h1>Student Login</h1>
+            <form action={% url 'studentlogindash' %} method="post">
+                {% csrf_token %}
+        
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" name="susername" required>
+            
+            
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="spassword" required>
+        
+                <button type="submit" class="btn btn-primary">Login</button>
+          </form>
+        </div>
+  
+</body>
+</html>

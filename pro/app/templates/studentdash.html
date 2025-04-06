@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>studentdashboard</title>
+    <style>
+        section {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+        .profile, .startexam {
+            border: 1px solid #ccc;
+            padding: 20px;
+            width: 45%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <a href="{% url "slogout" %}"><button >Logout</button></a>
+
+    <section>
+        <div class="profile">
+            <h2>Profile</h2>
+            <img src="{{ student.image.url }}" alt="Profile Image" style="width: 200px; height: 200px;">
+            <p>username:{{ student.user.username}}</p>
+            <p>name:{{student.user.first_name}} {{student.user.last_name}}</p>
+            <p>email:{{student.user.email}}</p>
+            <p>department:{{student.depts}}</p>
+
+            <h2>upload image</h2>
+            <form method="POST" enctype="multipart/form-data" action="{% url 'images' %}">
+               
+                {% csrf_token %}
+                <input type="file" name="image" accept="image/*">
+                <button type="submit">Upload</button>
+            </form>
+        </div>
+        <div class="startexam">
+            <h2>Start Exam</h2>
+           
+           <a href="{% url "exam" %}"> <button type="submit" >Start Exam</button></a>
+            
+        </div>
+   
+    </section>
+</body>
+</html>
