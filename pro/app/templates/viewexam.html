@@ -3,9 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Exam Questions</title>
+    <style>
+        .camera-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .camera {
+            width: 45%;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            text-align: center;
+        }
+        video {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
-    exm details
+    <h1>Exam Questions</h1>
+
+    <!-- Camera Module -->
+    <div class="camera-container">
+        <div class="camera">
+            <h3>Camera 1</h3>
+            <video id="camera1" autoplay></video>
+        </div>
+        <div class="camera">
+            <h3>Camera 2</h3>
+            <video id="camera2" autoplay></video>
+        </div>
+    </div>
+
+    <!-- Exam Questions -->
+    {% if submitted %}
+        <h2>Results</h2>
+        <p>Total Questions: {{ total_questions }}</p>
+        <p>Correct Answers: {{ total_correct }}</p>
+        <p>Score: {{ score }}%</p>
+    {% else %}
+        <form method="post">
+            {% csrf_token %}
+            {% for question in questions %}
+                <div>
+                    <p><strong>{{ question.question_text }}</strong></p>
+                    <label>
+                        <input type="radio" name="question_{{ question.id }}" value="1" required>
+                        {{ question.option1 }}
+                    </label><br>
+                    <label>
+                        <input type="radio" name="question_{{ question.id }}" value="2">
+                        {{ question.option2 }}
+                    </label><br>
+                    <label>
+                        <input type="radio" name="question_{{ question.id }}" value="3">
+                        {{ question.option3 }}
+                    </label><br>
+                    <label>
+                        <input type="radio" name="question_{{ question.id }}" value="4">
+                        {{ question.option4 }}
+                    </label>
+                </div>
+                <hr>
+            {% endfor %}
+            <button type="submit">Submit Answers</button>
+        </form>
+    {% endif %}
+
+    <script>
+        // Access the first camera
+        const camera1 = document.getElementById('camera1');
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                camera1.srcObject = stream;
+            })
+            .catch(error => {
+                console.error('Error accessing camera 1:', error);
+            });
+
+        // Access the second camera (if available)
+        const camera2 = document.getElementById('camera2');
+        navigator.mediaDevices.enumerateDevices()
+            .then(devices => {
+                const videoDevices = devices.filter(device => device.kind === 'videoinput');
+                if (videoDevices.length > 1) {
+                    // Explicitly request the second camera
+                    navigator.mediaDevices.getUserMedia({ video: { deviceId: videoDevices[1].deviceId } })
+                        .then(stream => {
+                            camera2.srcObject = stream;
+                        })
+                        .catch(error => {
+                            console.error('Error accessing camera 2:', error);
+                        });
+                } else {
+                    camera2.innerHTML = '<p>No second camera available</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Error enumerating devices:', error);
+            });
+
+        // Browser Locking
+        let tabSwitchCount = 0;
+
+        // Detect if the user switches tabs or minimizes the browser
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'hidden') {
+                tabSwitchCount++;
+                alert('You have switched tabs or minimized the browser. This action is not allowed during the exam.');
+            }
+        });
+
+        // Prevent right-click and context menu
+        document.addEventListener('contextmenu', (event) => {
+            event.preventDefault();
+            alert('Right-click is disabled during the exam.');
+        });
+
+        // Prevent keyboard shortcuts like Ctrl+T, Ctrl+W, etc.
+        document.addEventListener('keydown', (event) => {
+            if (event.ctrlKey || event.metaKey) {
+                alert('Keyboard shortcuts are disabled during the exam.');
+                event.preventDefault();
+            }
+        });
+
+        // Log the number of tab switches
+        window.addEventListener('beforeunload', () => {
+            console.log(`User switched tabs ${tabSwitchCount} times.`);
+        });
+    </script>
 </body>
 </html>

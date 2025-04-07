@@ -118,6 +118,34 @@ def teacherlogin(request):
     return redirect(index)
 
 def viewexam(request):
+    if request.method == 'POST':
+        # Retrieve all questions
+        questions = Question.objects.all()
+        total_correct = 0
+        total_questions = questions.count()
+
+        # Process submitted answers
+        for question in questions:
+            submitted_answer = request.POST.get(f'question_{question.id}')
+            if submitted_answer == question.correct_option:
+                total_correct += 1
+         # Calculate the score
+        score = (total_correct / total_questions) * 100 if total_questions > 0 else 0
+
+        # Pass the result to the template
+        return render(request, 'viewexam.html', {
+            'questions': questions,
+            'total_correct': total_correct,
+            'total_questions': total_questions,
+            'score': score,
+            'submitted': True
+        })
+    # Display the questions
+    questions = Question.objects.all()
+    return render(request, 'viewexam.html', {
+        'questions': questions,
+        'submitted': False
+    })
     return render(request, 'viewexam.html')
 
 def create_question(request):
